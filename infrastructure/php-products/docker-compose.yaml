@@ -1,16 +1,23 @@
-nginx:
-  container_name: php-products_nginx
-  build: images/nginx
-  links:
-    - php
-  ports:
-    - "80:80"
+version: '3'
 
-php:
-  container_name: php-products_php
-  build: images/php
-  volumes:
-    - ../../php-products:/var/www/html
-  working_dir: /var/www/html/public
-  ports:
-    - "9000:9000"
+services:
+  php:
+    container_name: php-products_php
+    build:
+      context: ./images/php
+    volumes:
+      - ../../php-products:/var/www/html
+    working_dir: /var/www/html
+    ports:
+      - "9000:9000"
+
+  nginx:
+    container_name: php-products_nginx
+    build:
+      context: ./images/nginx
+    depends_on:
+      - php
+    links:
+      - php
+    ports:
+      - "80:80"
