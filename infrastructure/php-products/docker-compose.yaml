@@ -1,0 +1,16 @@
+nginx:
+  container_name: php-products_nginx
+  build: images/nginx
+  links:
+    - php
+  ports:
+    - "80:80"
+
+php:
+  container_name: php-products_php
+  build: images/php
+  volumes:
+    - ../../php-products:/var/www/html
+  working_dir: /var/www/html/public
+  ports:
+    - "9000:9000"
