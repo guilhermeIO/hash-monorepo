@@ -1,6 +1,11 @@
 FROM php:7.2-fpm-alpine
 
-RUN apk update && apk add zlib-dev
+# Packages registry & PHP Extensions
+RUN apk update && \
+    # APK
+    apk add alpine-sdk zlib-dev pcre-dev autoconf && \
+    # PECL
+    pecl install mongodb
 
 RUN docker-php-ext-install mbstring tokenizer zip
 

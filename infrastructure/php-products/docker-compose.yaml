@@ -6,6 +6,7 @@ services:
     build:
       context: ./images/php
     volumes:
+      - ./images/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini
       - ../../php-products:/var/www/html
     working_dir: /var/www/html
     ports:
