@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ProductsController;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -10,3 +12,5 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
+
+$router->get('products', ['uses' => 'ProductsController@list']);
