@@ -21,7 +21,7 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-$app->withEloquent();
+// $app->withEloquent();
 
 /*
 |--------------------------------------------------------------------------
@@ -73,8 +73,11 @@ $app->middleware([
 | totally optional, so you are not required to uncomment this line.
 |
 */
-$app->register(App\Providers\AppServiceProvider::class);
 $app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
+
+$app->register(App\Providers\AppServiceProvider::class);
+
+$app->configure('database');
 
 /*
 |--------------------------------------------------------------------------
