@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  mongodb:
+    image: mongo:4.0.13
+    container_name: databases_mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: MongoDB2019!
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./databases/data:/data/db
+    networks:
+      - backend
+
+  php:
+    container_name: php-products_php
+    build:
+      context: ./php-products/php
+    depends_on:
+      - mongodb
+    links:
+      - mongodb
+    volumes:
+      - ./php-products/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ../php-products:/var/www/html
+    working_dir: /var/www/html
+    ports:
+      - "9000:9000"
+    networks:
+      - backend
+
+  nginx:
+    container_name: php-products_nginx
+    build:
+      context: ./php-products/nginx
+    depends_on:
+      - php
+    links:
+      - php
+    ports:
+      - "80:80"
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge

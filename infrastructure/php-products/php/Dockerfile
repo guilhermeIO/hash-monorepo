@@ -4,6 +4,7 @@ FROM php:7.2-fpm-alpine
 RUN apk update && \
     # APK
     apk add build-base gcc zlib-dev pcre-dev autoconf && \
+    apk add curl-dev openssl-dev pkgconfig && \
     # PECL
     pecl install mongodb
 
