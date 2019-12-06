@@ -6,19 +6,19 @@ class ProductsListTest extends TestCase
 {
     protected const ENDPOINT = 'products';
 
-    public function testResponseStructureOnSuccess(): void {
+    public function testResponseJsonStructure()
+    {
         $this->json('GET', static::ENDPOINT)
             ->seeJsonStructure([
                 'status',
-                'data'
-            ]);
-    }
-
-    public function testRespondsWithEmptyList(): void {
-        $this->json('GET', static::ENDPOINT)
-            ->seeJson([
-                'status' => 200,
-                'data' => []
+                'data' => [
+                   [
+                    'id',
+                    'title',
+                    'description',
+                    'price_in_cents'
+                    ]
+                ]
             ]);
     }
 }
