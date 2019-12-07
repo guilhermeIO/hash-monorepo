@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package productsdiscount;
+
+service ProductsDiscount {
+  rpc Apply(ApplyRequest) returns (ApplyResponse);
+}
+
+message ApplyRequest {
+  string product_id = 1;
+  string user_id = 2;
+}
+
+message ApplyResponse {
+  Discount discount = 1;
+
+  message Discount {
+    int32 percent = 1;
+    int64 value_in_cents = 2;
+  }
+}
