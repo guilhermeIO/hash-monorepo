@@ -1,6 +1,7 @@
 version: '3'
 
 services:
+  # Databases
   mongodb:
     image: mongo:4.0.13
     container_name: databases_mongodb
@@ -14,6 +15,7 @@ services:
     networks:
       - backend
 
+  # Service: PHP-PRODUCTS
   php:
     container_name: php-products_php
     build:
@@ -44,6 +46,23 @@ services:
     networks:
       - backend
 
+  # Service: NODE-PRODUCTS-DISCOUNT
+  node:
+    container_name: node-products-discount
+    build:
+      context: ../node-products-discount
+    links:
+      - mongodb
+    volumes:
+      - ../node-products-discount:/app
+      - ../protobufs:/protobufs
+    ports:
+      - "50051:50051"
+    networks:
+      - backend
+
+
+# Networks
 networks:
   backend:
     driver: bridge
