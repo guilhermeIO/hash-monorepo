@@ -6,8 +6,8 @@ RUN apk update && \
     apk add build-base gcc zlib-dev pcre-dev autoconf && \
     apk add curl-dev openssl-dev pkgconfig && \
     # PECL
-    pecl install mongodb
-
-RUN docker-php-ext-install mbstring tokenizer zip
+    pecl install mongodb && \
+    # DOCKER-PHP-EXT
+    docker-php-ext-install mbstring tokenizer zip
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

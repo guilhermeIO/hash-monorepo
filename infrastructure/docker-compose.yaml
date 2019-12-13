@@ -19,13 +19,14 @@ services:
   php:
     container_name: php-products_php
     build:
-      context: ./php-products/php
+      context: ../php-products
+      dockerfile: _docker/php/Dockerfile
     depends_on:
       - mongodb
     links:
       - mongodb
     volumes:
-      - ./php-products/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ../php-products/_docker/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini
       - ../php-products:/var/www/html
     working_dir: /var/www/html
     ports:
@@ -36,7 +37,8 @@ services:
   nginx:
     container_name: php-products_nginx
     build:
-      context: ./php-products/nginx
+      context: ../php-products
+      dockerfile: _docker/nginx/Dockerfile
     depends_on:
       - php
     links:
@@ -49,8 +51,10 @@ services:
   # Service: NODE-PRODUCTS-DISCOUNT
   node:
     container_name: node-products-discount
+    command: ./node_modules/.bin/nodemon server.js
     build:
       context: ../node-products-discount
+      dockerfile: _docker/Dockerfile
     links:
       - mongodb
     volumes:
