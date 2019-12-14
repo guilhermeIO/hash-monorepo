@@ -28,5 +28,18 @@ describe('Apply', () => {
       expect(err.message).to.contain('empty');
       done();
     })
-  })
+  });
+
+  it('should fail when product is not found', done => {
+    const payload = mock.productNotFound;
+
+    client.apply(payload, (err, response) => {
+      expect(err).to.not.be.equal(null);
+      expect(typeof err).to.be.equal('object');
+      expect(err.code).to.be.equal(status.INVALID_ARGUMENT);
+      expect(err.message).to.contain('product_id');
+      expect(err.message).to.contain('not found');
+      done();
+    });
+  });
 });
