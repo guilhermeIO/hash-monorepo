@@ -5,7 +5,7 @@ const { client } = require('../../client');
 
 describe('Apply', () => {
   it('should fail when "product_id" is missing', done => {
-    const payload = mock.requiredProductId;
+    const payload = mock.error.requiredProductId;
 
     client.apply(payload, (err, response) => {
       expect(err).to.not.be.equal(null);
@@ -18,7 +18,7 @@ describe('Apply', () => {
   });
 
   it('should fail when "user_id" is missing', done => {
-    const payload = mock.requiredUserId;
+    const payload = mock.error.requiredUserId;
 
     client.apply(payload, (err, response) => {
       expect(err).to.not.be.equal(null);
@@ -31,13 +31,26 @@ describe('Apply', () => {
   });
 
   it('should fail when product is not found', done => {
-    const payload = mock.productNotFound;
+    const payload = mock.error.productNotFound;
 
     client.apply(payload, (err, response) => {
       expect(err).to.not.be.equal(null);
       expect(typeof err).to.be.equal('object');
       expect(err.code).to.be.equal(status.INVALID_ARGUMENT);
       expect(err.message).to.contain('product_id');
+      expect(err.message).to.contain('not found');
+      done();
+    });
+  });
+
+  it('should fail when user is not found', done => {
+    const payload = mock.error.userNotFound;
+
+    client.apply(payload, (err, response) => {
+      expect(err).to.not.be.equal(null);
+      expect(typeof err).to.be.equal('object');
+      expect(err.code).to.be.equal(status.INVALID_ARGUMENT);
+      expect(err.message).to.contain('user_id');
       expect(err.message).to.contain('not found');
       done();
     });

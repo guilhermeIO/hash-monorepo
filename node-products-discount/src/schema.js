@@ -16,6 +16,10 @@ function validate (method, payload) {
   }
   const { error } = schema.validate(payload);
 
+  if (error) {
+    console.error(`${LOG_TAG}: ${error}`);
+  }
+
   return {
     payload,
     ...error && {
