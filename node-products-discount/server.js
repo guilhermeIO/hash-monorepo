@@ -1,5 +1,6 @@
 'use strict';
 
+const config = require('./src/config');
 const { apply } = require('./src/apply');
 const database = require('./src/database');
 const { LOG_TAG } = require('./src/config');
@@ -18,7 +19,7 @@ function createServer() {
 }
 
 async function bootstrap() {
-  await database.init('mongodb://root:MongoDB2019!@172.19.0.2:27017');
+  await database.init();
 
   createServer().start();
   console.log(`${LOG_TAG}: gRPC Server started`);

@@ -1,12 +1,16 @@
-const { LOG_TAG } = require('./config');
+const { ObjectID } = require('mongodb');
+
 const database = require("./database");
+const { LOG_TAG } = require('./config');
 
-module.exports = {
+const self = module.exports = {
   find: (collection, where) => {
-    return new Promise((resolve, reject) => {
-      const connection = database.connection();
-
+    return new Promise(async (resolve, reject) => {
       try {
+        const connection = await database.connection();
+
+        where = self._formatCondition(where);
+
         connection
           .collection(collection)
           .find(where)
@@ -33,5 +37,30 @@ module.exports = {
         return reject(error);
       }
     });
+  },
+
+  update: async (collection, values, where) => {
+    try {
+      const connection = await database.connection();
+
+      where = self._formatCondition(where);
+
+      const { result } = await connection
+        .collection(collection)
+        .updateMany(where, { $set: { ...values } });
+
+      console.log(`${LOG_TAG}: "${collection}" updated`, values, where);
+      return Promise.resolve(result);
+    } catch (err) {
+      console.error(`${LOG_TAG}: ${err}`);
+      return Promise.reject(err);
+    }
+  },
+
+  _formatCondition: payload => {
+    if (payload._id && !(payload._id instanceof ObjectID)) {
+      payload._id = new ObjectID(payload._id);
+    }
+    return payload;
   }
 }

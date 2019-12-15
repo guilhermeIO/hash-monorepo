@@ -1,15 +1,18 @@
-const { LOG_TAG } = require('./config');
+const { LOG_TAG, MONGO_URI } = require('./config');
 const { MongoClient } = require('mongodb');
 
 let _connection;
 let _client;
 
-module.exports = {
-  init: function (url) {
+const self = module.exports = {
+  init: function () {
     return new Promise((resolve, reject) => {
       try {
         if (!_client) {
-          _client = new MongoClient(url, { useNewUrlParser: true });
+          _client = new MongoClient(MONGO_URI, {
+            'useNewUrlParser': true,
+            'useUnifiedTopology': true
+          });
         }
 
         if (_connection) {
@@ -32,7 +35,14 @@ module.exports = {
       }
     })
   },
-  connection: () => _connection,
+
+  connection: async () => {
+    if (!_connection) {
+      await self.init();
+    }
+    return _connection;
+  },
+
   closeClient: () => {
     if (!_connection) {
       return console.log(`${LOG_TAG}: No database connection open.`);
