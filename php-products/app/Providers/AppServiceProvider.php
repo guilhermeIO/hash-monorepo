@@ -2,10 +2,14 @@
 
 namespace App\Providers;
 
-
+use Grpc\ChannelCredentials;
 use Illuminate\Support\ServiceProvider;
+use Productsdiscount\ProductsDiscountClient;
 use App\Services\Product\{
     ProductService, ProductServiceInterface
+};
+use App\Services\User\{
+    UserService, UserServiceInterface
 };
 
 class AppServiceProvider extends ServiceProvider
@@ -21,5 +25,15 @@ class AppServiceProvider extends ServiceProvider
             ProductServiceInterface::class,
             ProductService::class
         );
+        $this->app->bind(
+            UserServiceInterface::class,
+            UserService::class
+        );
+
+        $this->app->singleton(ProductsDiscountClient::class, function () {
+            return new ProductsDiscountClient('node-products-discount:50051', [
+                'credentials' => ChannelCredentials::createInsecure()
+            ]);
+        });
     }
 }
