@@ -106,7 +106,7 @@ describe('Apply', () => {
           const { discount } = response;
           expect(typeof discount).to.be.equal('object');
           expect(parseInt(discount.percent)).to.be.equal(5);
-          expect(parseInt(discount.value_in_cents)).to.be.equal(0);
+          expect(parseInt(discount.value_in_cents)).to.be.equal(500);
           done();
         });
       });

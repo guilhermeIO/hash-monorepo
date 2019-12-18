@@ -19,6 +19,7 @@ module.exports = {
       .then(payload => verifyUserBirthday(payload))
       .then(payload => verifyBlackFriday(payload))
       .then(payload => limitDiscountPercent(payload))
+      .then(payload => setDiscountValue(payload))
       .then(({ discount }) => callback(null, { discount }))
       .catch(error => callback(error));
   }
@@ -87,5 +88,19 @@ async function limitDiscountPercent (payload) {
   if (discount.percent > 10) {
     discount.percent = 10;
   }
+  return { ...payload, discount };
+}
+
+async function setDiscountValue (payload) {
+  const { discount } = payload;
+
+  if (!discount.percent) {
+    return payload;
+  }
+
+  const { product } = payload;
+
+  discount.value_in_cents = product.price_in_cents * (discount.percent / 100);
+
   return { ...payload, discount };
 }
