@@ -46,21 +46,4 @@ class ProductsListTest extends TestCase
                 ]
             ]);
     }
-
-    public function testFailsWhenUserIsNotFound()
-    {
-        $headers = [
-            'X-USER-ID' => '5dec20fc84a64441061fdefc'
-        ];
-
-        $response = json_decode(
-            $this->json(
-                'GET', static::ENDPOINT, [], $headers
-            )->response->getContent()
-        );
-
-        $this->assertTrue($response->status === Response::HTTP_BAD_REQUEST);
-        $this->assertStringContainsString('not found', $response->message);
-        $this->assertStringContainsString('user_id', $response->message);
-    }
 }
