@@ -10,6 +10,8 @@ use Productsdiscount\{ ApplyRequest, ProductsDiscountClient };
 
 class ProductService implements ProductServiceInterface
 {
+    const GRPC_FAILURE_CODES = [3, 13, 14];
+
     protected $userService;
     protected $productModel;
     protected $productsDiscountClient;
@@ -29,27 +31,19 @@ class ProductService implements ProductServiceInterface
     {
         $products = $this->productModel->all()->toArray();
 
-        $canCheckForDiscount = $this->canCheckForDiscount();
-
-        return array_map(function ($item) use ($canCheckForDiscount)
+        return array_map(function ($item)
         {
             $id = $item['_id'];
 
             $product = [
-                'id' => $item['_id'],
+                'id' => $id,
                 'title' => $item['title'],
                 'description' => $item['description'],
                 'price_in_cents' => $item['price_in_cents'],
             ];
 
-            if ($canCheckForDiscount) {
-                $discount = $this->applyDiscount($id);
-                $product = array_merge($product, [
-                    'discount' => [
-                        'percent' => $discount->getPercent(),
-                        'value_in_cents' => $discount->getValueInCents()
-                    ]
-                ]);
+            if ($this->userService->getId()) {
+                $product = array_merge($product, $this->applyDiscount($id));
             }
             return $product;
         }, $products);
@@ -65,14 +59,17 @@ class ProductService implements ProductServiceInterface
             ->Apply($request)
             ->wait();
 
-        if ($status->code != 0) {
-            throw new GRPCException($status);
+        if (in_array($status->code, self::GRPC_FAILURE_CODES)) {
+            return [];
         }
-        return $response->getDiscount();
-    }
 
-    protected function canCheckForDiscount()
-    {
-        return $this->productsDiscountClient && $this->userService->getId();
+        $discount = $response->getDiscount();
+
+        return [
+            'discount' => [
+                'percent' => $discount->getPercent(),
+                'value_in_cents' => $discount->getValueInCents()
+            ]
+        ];
     }
 }
