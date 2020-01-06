@@ -1,6 +1,10 @@
 # Setup infrastructure
 up: build run
 
+# Stop all services
+down:
+	docker-compose down
+
 # Build all services
 build:
 	docker-compose build
@@ -16,7 +20,7 @@ test: http-api-test products-discount-test
 http-api-test:
 	@echo "";
 	$(info TESTING ------- HTTP API)
-	docker exec -it --user 1000 php-products_php composer test
+	docker exec -it --user 1000 php-http-api_php composer test
 	@echo "";
 	@echo "";
 

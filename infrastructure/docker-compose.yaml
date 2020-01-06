@@ -15,19 +15,19 @@ services:
     networks:
       - backend
 
-  # Service: PHP-PRODUCTS
+  # Service: PHP-HTTP-API
   php:
-    container_name: php-products_php
+    container_name: php-http-api_php
     build:
-      context: ../php-products
+      context: ../php-http-api
       dockerfile: _docker/php/Dockerfile
     depends_on:
       - mongodb
     links:
       - mongodb
     volumes:
-      - ../php-products/_docker/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini
-      - ../php-products:/var/www/html
+      - ../php-http-api/_docker/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ../php-http-api:/var/www/html
     working_dir: /var/www/html
     ports:
       - "9000:9000"
@@ -35,9 +35,9 @@ services:
       - backend
 
   nginx:
-    container_name: php-products_nginx
+    container_name: php-http-api_nginx
     build:
-      context: ../php-products
+      context: ../php-http-api
       dockerfile: _docker/nginx/Dockerfile
     depends_on:
       - php
