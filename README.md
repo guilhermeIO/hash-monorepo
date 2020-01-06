@@ -11,12 +11,12 @@ The following technologies are **required and expected to be already installed**
 * [Docker](https://docs.docker.com/install)
 * [Make](https://www.gnu.org/software/make/#download)
 
-**Clone** the repository
+**Clone** the repository:
 ```
 $ git clone git@github.com:guilhermeIO/hash-monorepo.git
 ```
 
-Inside the *infrastructure directory*, **provision the infrastructure**
+Inside the *infrastructure directory*, **provision the infrastructure**:
 ```
 $ make up
 ```
@@ -28,7 +28,10 @@ Inside the *infrastructure directory*, **test all services**:
 $ make test
 ```
 
-:information_source: To **test a specific service**, read it's corresponding README file.
+To **test a specific service**, just follow the command pattern **`make {SERVICE NAME}-test`**. Example:
+```
+$ make products-discount-test
+```
 
 # Repository Structure Overview
 
@@ -39,7 +42,7 @@ Each service lives on it's own directory and is prefixed with it's main language
 All protocol buffer files reside in the **`protobufs`** directory.
 
 ## Infrastructure
-Holds the file that composes the whole infrastructure for development environment (**docker-compose.yaml**).
+Holds the file that composes the whole infrastructure for the development environment (**docker-compose.yaml**).
 
 Also, provides a collection of useful commands - located at the file **Makefile**.
 
