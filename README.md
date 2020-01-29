@@ -47,3 +47,7 @@ Holds the file that composes the whole infrastructure for the development enviro
 Also, provides a collection of useful commands - located at the file **Makefile**.
 
 :information_source: Each service holds it's infrastructure specification under it's own **_docker** folder.
+
+# TODOS
+- Add .env file for Docker and Apps (best practice for sensitive data)
+- Add MingoDB dump, to seed database on setup
